@@ -1,61 +1,38 @@
-// create a web server that can listen to requests for /comments and send back the JSON file comments.json
-// create a web server that can listen to requests for /comments/new and can accept POST requests with JSON body
-// create a web server that can listen to requests for /comments/1 for example, and serve a single comment with an ID of 1
+// create a web server that can listen to requests
+// and respond with a JSON object
+// that looks like this:
+// {
+//     "comments": [
+//         {
+//             "name": "Bob",
+//             "comment": "Hello!"
+//         },
+//         {
+//             "name": "Jane",
+//             "comment": "Hi!"
+//         }
+//     ]
+// }
+// and returns it to the user
+// make sure the server is listening on port 8080
+// and returns the correct content-type
 
-const express = require('express');
-const fs = require('fs');
-const bodyParser = require('body-parser');
-const app = express();
+import { createServer } from 'http';
 
-app.use(bodyParser.json());
-
-app.get('/comments', (req, res) => {
-    fs.readFile('./comments.json', (err, data) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Something went wrong');
-        } else {
-            let comments = JSON.parse(data);
-            res.status(200).send(comments);
-        }
-    });
-});
-
-app.post('/comments', (req, res) => {
-    fs.readFile('./comments.json', (err, data) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Something went wrong');
-        } else {
-            let comments = JSON.parse(data);
-            comments.push(req.body);
-            fs.writeFile('./comments.json', JSON.stringify(comments), (err) => {
-                if (err) {
-                    console.log(err);
-                    res.status(500).send('Something went wrong');
-                } else {
-                    res.status(200).send('Comment added');
-                }
-            });
-        }
-    });
-});
-
-app.get('/comments/:id', (req, res) => {
-    fs.readFile('./comments.json', (err, data) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Something went wrong');
-        } else {
-            let comments = JSON.parse(data);
-            let comment = comments.find(c => c.id === parseInt(req.params.id));
-            if (comment) {
-                res.status(200).send(comment);
-            } else {
-                res.status(404).send('Comment not found');
+var server = createServer(function (req, res) {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+        comments: [
+            {
+                name: 'Bob',
+                comment: 'Hello!'
+            },
+            {
+                name: 'Jane',
+                comment: 'Hi!'
             }
-        }
-    });
+        ]
+    }));
 });
 
-app.listen(3000);
+server.listen(8080);
