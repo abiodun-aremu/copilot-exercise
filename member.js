@@ -1,5 +1,7 @@
-function SkillsMember(name, age, skills) {
-    this.name = name;
-    this.age = age;
-    this.skills = skills;
+function SkillsMember() {
+  return (
+    <div>
+      <h1>Skills Member</h1>
+    </div>
+  );
 }
