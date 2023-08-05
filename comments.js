@@ -1,4 +1,4 @@
-// create web server that can listen to requests
+// Create web server that can listen to requests
 // and respond with a JSON object
 // that looks like this:
 // {
